@@ -1,17 +1,30 @@
-import { PROPERTYLISTINGSAMPLE } from "@/constants/index";
-import { useRouter } from "next/router";
-import PropertyDetail from "@/components/property/PropertyDetail";
+
+import { useRouter } from 'next/router'
+import { PROPERTYLISTINGSAMPLE } from '@/constants/propertyList'
+import PropertyDetail from '@/components/property/PropertyDetail'
+import { Property } from '@/interfaces'
 
 export default function PropertyPage() {
-  const router = useRouter();
-  const { id } = router.query;
-  const property = PROPERTYLISTINGSAMPLE.find((item) => item.name === id);
+  const router = useRouter()
+  const { id } = router.query
 
-  if (!property) return <p>Property not found</p>;
+  // Convert id from query string to number
+  const property: Property | undefined = PROPERTYLISTINGSAMPLE.find(
+    (p) => p.id === Number(id)
+  )
+
+  if (!property) {
+    return <p className="text-center mt-20 text-gray-500">Property not found.</p>
+  }
 
   return (
-    <div>
-      <PropertyDetail property={property} />
-    </div>
-  );
+    <PropertyDetail
+      title={property.title}
+      location={property.location}
+      description={property.description}
+      amenities={property.amenities}
+      pricePerNight={property.pricePerNight}
+    />
+  )
 }
+
